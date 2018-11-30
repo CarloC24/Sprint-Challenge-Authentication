@@ -22,7 +22,7 @@ export default class login extends Component {
         );
         if (response) {
           localStorage.setItem('token', response.data.token);
-          this.props.history.push('/');
+          this.props.history.push('/users');
           alert(response.data.Message);
         }
       } catch (err) {
@@ -35,6 +35,7 @@ export default class login extends Component {
   render() {
     return (
       <div>
+        <h1>Login component</h1>
         <form onSubmit={this.handleSubmit}>
           <input
             type="text"
