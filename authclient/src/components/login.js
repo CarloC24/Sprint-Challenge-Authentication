@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import axios from 'axios';
 
 export default class login extends Component {
   state = {
@@ -11,8 +12,25 @@ export default class login extends Component {
     this.setState({ [name]: value });
   };
 
-  handleSubmit = e => {
+  handleSubmit = async e => {
     e.preventDefault();
+    if (this.state.username && this.state.password) {
+      try {
+        const response = await axios.post(
+          'http://localhost:3300/api/login',
+          this.state
+        );
+        if (response) {
+          localStorage.setItem('token', response.data.token);
+          this.props.history.push('/');
+          alert(response.data.Message);
+        }
+      } catch (err) {
+        alert('not a valid user');
+      }
+    } else {
+      alert('username and password cannot be empty');
+    }
   };
   render() {
     return (
