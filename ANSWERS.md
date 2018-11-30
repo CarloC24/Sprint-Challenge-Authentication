@@ -2,8 +2,16 @@
 
 1. What is the purpose of using _sessions_?
 
+To have a to make the http stateful.
+
 2. What does bcrypt do to help us store passwords in a secure manner.
+
+Bcrypt has password hashing.
 
 3. What does bcrypt do to slow down attackers?
 
+It hashes the passwords so attackers will decodes it longer.
+
 4. What are the three parts of the JSON Web Token?
+
+Headers, Payload, Signature
