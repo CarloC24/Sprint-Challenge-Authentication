@@ -1,6 +1,7 @@
 const axios = require('axios');
 const bcrypt = require('bcryptjs');
 const db = require('../database/dbConfig');
+const generateToken = require('./generateToken');
 
 const { authenticate } = require('./middlewares');
 
@@ -8,6 +9,7 @@ module.exports = server => {
   server.post('/api/register', register);
   server.post('/api/login', login);
   server.get('/api/jokes', authenticate, getJokes);
+  server.get('/api/users', getUsers);
 };
 
 async function register(req, res) {
@@ -31,19 +33,28 @@ async function register(req, res) {
 }
 
 async function login(req, res) {
-  // implement user login
-  const { username, password } = req.body;
-  if (creds.username && creds.body) {
-    try {
-      const response = await db('users')
-        .where({ username: username })
-        .first();
-    } catch (err) {}
-  } else {
-    res
-      .status(500)
-      .json({ message: 'Fields : "username" && "password" cannot be empty' });
+  //implement user login
+  const creds = req.body;
+  try {
+    const response = await db('users')
+      .where({ username: creds.username })
+      .first();
+    if (response && bcrypt.compareSync(creds.password, response.password)) {
+      const token = generateToken(response);
+      res
+        .status(200)
+        .json({ Message: `Welcome ${response.username} to dad jokes`, token });
+    } else {
+      res.status(403).json({ message: 'Wrong password' });
+    }
+  } catch (err) {
+    res.status(200).json({ message: 'no user found' });
   }
+}
+
+async function getUsers(req, res) {
+  const response = await db('users');
+  return res.status(200).json(response);
 }
 
 function getJokes(req, res) {

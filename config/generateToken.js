@@ -5,7 +5,7 @@ module.exports = user => {
   const jwtPayload = {
     ...user
   };
-  const jwtSecret = secret;
+  const jwtSecret = secret.jwtKey;
   const jwtOptions = {
     expiresIn: '60m'
   };
